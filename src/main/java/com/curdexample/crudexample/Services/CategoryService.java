@@ -40,7 +40,7 @@ public class CategoryService implements CategorySeviceInter{
             update.setCategoryDescription(category.getCategoryDescription());
             // update.setCreateDate(product.getCreateDate());updateDate=new Date(System.currentTimeMillis());
             Date date= new Date(System.currentTimeMillis());
-            update.setUpdateDate(String.valueOf(date));
+            update.setUpdateDate(date);
             update.setActive(category.isActive());
             update.setDeleted(category.isDeleted());
             categoryDao.save(update);

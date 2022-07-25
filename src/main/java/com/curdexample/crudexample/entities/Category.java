@@ -50,19 +50,17 @@ public class Category {
         this.categoryDescription = categoryDescription;
     }
 
-    public String getCreateDate() {
+       public Date getCreateDate() {
         return createDate;
     }
-
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public String getUpdateDate() {
+    public Date getUpdateDate(Date updateDate) {
         return updateDate;
     }
-
-    public void setUpdateDate(String updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 
