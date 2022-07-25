@@ -1,0 +1,9 @@
+
+<configuration>
+    <appender name = "file" class = "ch.qos.logback.core.FileAppender">
+        <File>random.log</File>
+    </appender>
+    <root level = "INFO">
+        <appender-ref ref = "file"/>
+    </root>
+</configuration>
