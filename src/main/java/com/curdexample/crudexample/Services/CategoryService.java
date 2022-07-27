@@ -28,7 +28,7 @@ public class CategoryService implements CategorySeviceInter{
     }
     @Override
     public void deleteCategory(int categoryId) {
-        categoryDao.deleteCategoryById(categoryId);
+        categoryDao.deleteById(categoryId);
 
     }
     @Override

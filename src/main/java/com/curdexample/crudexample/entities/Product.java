@@ -23,6 +23,14 @@ public class Product {
     private Date updateDate=new Date(System.currentTimeMillis());
     @Column
     private boolean isActive=true;
+
+    public Product( String productName, String productDescription, int price) {
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.price = price;
+        this.isDeleted = false;
+    }
+
     @Column
     private boolean isDeleted=false;
     public int getProductId() {

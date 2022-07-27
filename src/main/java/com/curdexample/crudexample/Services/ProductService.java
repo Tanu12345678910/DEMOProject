@@ -55,9 +55,10 @@ public class ProductService implements ProductServiceInter {
             return update;
         }
     @Override
-    public void deleteProduct(int productId)throws ResourceNotFoundException {
+    public String deleteProduct(int productId)throws ResourceNotFoundException {
         if (productDao.findById(productId).isPresent()) {
             productDao.deleteById(productId);
+            return "deleted";
         }
         else {
             throw new ResourceNotFoundException();
