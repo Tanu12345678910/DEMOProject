@@ -5,6 +5,9 @@ import java.util.*;
 @Entity
 @Table
 public class Product {
+    public Product() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
@@ -24,7 +27,8 @@ public class Product {
     @Column
     private boolean isActive=true;
 
-    public Product( String productName, String productDescription, int price) {
+    public Product( int productId,String productName, String productDescription, int price) {
+       this.productId=productId;
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;

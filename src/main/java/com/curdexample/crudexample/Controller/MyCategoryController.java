@@ -11,26 +11,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 @RestController
-@RequestMapping("/category")
+//@RequestMapping("/category")
 @Api(value = "Category Service", description = "My Category Service")
 public class MyCategoryController {
     private static final Logger logger= LoggerFactory.getLogger(MyCategoryController.class);
     @Autowired
     private CategorySeviceInter categorySeviceInter;
-    @GetMapping("/startingCategory")
-    @ApiOperation(value = "Starting api")
-    public String StartingFunc()
-    {
-        logger.info("Fatal Error");
-        return "This is Starting Category Mapping";
-    }
+//    @GetMapping("/startingCategory")
+//    @ApiOperation(value = "Starting api")
+//    public String StartingFunc()
+//    {
+//        logger.info("Fatal Error");
+//        return "This is Starting Category Mapping";
+//    }
     @GetMapping("/category")
     @ApiOperation(value = "Search Category api")
     public ResponseEntity<?> getCategory(@RequestParam(required = false)String categoryId)
     {
         if(categoryId!=null)
         {
-            return new ResponseEntity<>(this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)), HttpStatus.OK);
+            return new ResponseEntity<>(this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)), HttpStatus.FOUND);
         }
         else
         {
@@ -39,9 +39,14 @@ public class MyCategoryController {
     }
     @PostMapping("/category")
     @ApiOperation(value = "Store Category api")
-    public Category addCategory(@RequestBody Category category)
+    public ResponseEntity <Category> addCategory(@RequestBody Category category)
     {
-        return this.categorySeviceInter.addCategory(category);
+        try {
+            return new ResponseEntity<>( this.categorySeviceInter.addCategory(category),HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     @DeleteMapping("category/{id}")
     @ApiOperation(value = "Delete Product api")

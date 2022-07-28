@@ -2,7 +2,6 @@ package com.curdexample.crudexample.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 @Entity
@@ -19,13 +18,20 @@ public class Category {
         @JsonFormat(pattern ="dd-MM-yyyy")
          private  Date createDate=new Date(System.currentTimeMillis());
         @Column
-        @JsonFormat(pattern ="dd-MM-yyyy")
+        @JsonFormat(pattern = "dd-MM-yyyy")
         private Date updateDate=new Date(System.currentTimeMillis());
         @Column
         private  boolean isActive=true;
         @Column
         private boolean isDeleted=false;
 
+    public Category() {
+    }
+
+    public Category( String categoryName, String categoryDescription) {
+        this.categoryName = categoryName;
+        this.categoryDescription = categoryDescription;
+    }
     public int getCategoryId() {
         return categoryId;
     }
