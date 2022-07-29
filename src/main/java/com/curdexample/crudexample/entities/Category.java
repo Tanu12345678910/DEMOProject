@@ -25,13 +25,16 @@ public class Category {
         @Column
         private boolean isDeleted=false;
 
+
     public Category() {
     }
+
 
     public Category( String categoryName, String categoryDescription) {
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
     }
+
     public int getCategoryId() {
         return categoryId;
     }
@@ -59,6 +62,7 @@ public class Category {
        public Date getCreateDate() {
         return createDate;
     }
+
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }

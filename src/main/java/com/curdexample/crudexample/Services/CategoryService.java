@@ -27,8 +27,9 @@ public class CategoryService implements CategorySeviceInter{
         return category;
     }
     @Override
-    public void deleteCategory(int categoryId) {
-        categoryDao.deleteById(categoryId);
+    public String deleteCategory(int categoryId) {
+        categoryDao.deleteCategoryById(categoryId);
+        return "deleted";
 
     }
     @Override
@@ -38,7 +39,7 @@ public class CategoryService implements CategorySeviceInter{
             update = categoryDao.findById(categoryId).get();
             update.setCategoryName(category.getCategoryName());
             update.setCategoryDescription(category.getCategoryDescription());
-            // update.setCreateDate(product.getCreateDate());updateDate=new Date(System.currentTimeMillis());
+            update.setCreateDate(category.getCreateDate());
             Date date= new Date(System.currentTimeMillis());
             update.setUpdateDate(date);
             update.setActive(category.isActive());

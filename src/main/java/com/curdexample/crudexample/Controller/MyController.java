@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 //@RequestMapping("/product")
 @Api(value = "Product Service", description = "My Product Service")
+
+
 public class MyController {
     private static final Logger logger= LoggerFactory.getLogger(MyController.class);
   @Autowired
     private ProductServiceInter productServiceInter;
-//    @GetMapping("/starting")
-//    @ApiOperation(value = "Starting api")
-//    public String StartingFunc()
-//    {
-//        logger.info("Fatal Error");
-//        return "This is Starting mapping";
-//    }
+// Api of Products-get,post,put,delete,patch
+
+
     @GetMapping("/product")
     @ApiOperation(value = "Search Product api")
     public ResponseEntity<?> getproduct(@RequestParam(required = false) String productId) {
+        logger.info("Fetching the data");
         if(productId!=null) {
             return new ResponseEntity<>(this.productServiceInter.getProduct(Integer.parseInt(productId)), HttpStatus.OK);
         }
         else
             return new ResponseEntity<>( this.productServiceInter.getProduct(),HttpStatus.OK);
     }
+
     @PostMapping("/product")
     @ApiOperation(value = "Store Product api")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
@@ -41,9 +41,11 @@ public class MyController {
             Product product1 = this.productServiceInter.addProduct(product);
             return new ResponseEntity<>(product1, HttpStatus.FOUND);
         } catch (Exception e) {
+            logger.error("unable to add");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @PutMapping("/product/{id}")
     @ApiOperation(value = "Update Product api")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product,@PathVariable(value = "id") int productId)
@@ -53,9 +55,11 @@ public class MyController {
             return new ResponseEntity<Product>(product1,HttpStatus.FOUND);
         }catch (Exception e)
         {
+            logger.error("unable to update");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @DeleteMapping("product/{id}")
     @ApiOperation(value = "Delete Product api")
     public ResponseEntity<String> deleteProduct(@PathVariable(value = "id") int productId)
@@ -66,9 +70,11 @@ public class MyController {
         }
         catch (Exception e)
         {
+            logger.error("unable to delete");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
    @PatchMapping("/product/{id}")
     public ResponseEntity<Product> patchProduct(@RequestBody Product product,@PathVariable(value="id") int productId)
     {
@@ -77,6 +83,7 @@ public class MyController {
             return new ResponseEntity<>(product1,HttpStatus.FOUND);
         }catch (Exception e)
         {
+            logger.error("unable to patch data");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

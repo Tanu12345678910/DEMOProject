@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface ProductDao extends JpaRepository<Product, Integer>{
     @Modifying
     @Query(value = "update product set is_deleted = true where product_id =?1",nativeQuery = true)
-    void deleteProduct(int categoryId);
+    void deleteById(int categoryId);
 }
