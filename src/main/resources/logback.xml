@@ -1,19 +1,19 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <configuration>
-    <appender name = "stdout" class = "ch.qos.logback.core.ConsoleAppender">
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d [%level] %c{1.}  %m%n</pattern>
+            <pattern>%d [%level] %c{1.} %m%n</pattern>
         </encoder>
     </appender>
 
-    <appender name = "file" class = "ch.qos.logback.core.FileAppender">
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
         <File>random.log</File>
         <encoder>
-            <pattern>%d [%level] %c{1.}  %m%n</pattern>
+            <pattern>%d [%level] %c{1.} %m%n</pattern>
         </encoder>
     </appender>
-    <root level = "INFO">
-        <appender-ref ref = "file"/>
-        <appender-ref ref = "stdout"/>
+    <root level="INFO">
+        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
     </root>
 </configuration>

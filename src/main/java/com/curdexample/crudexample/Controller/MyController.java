@@ -1,5 +1,5 @@
 package com.curdexample.crudexample.Controller;
-import com.curdexample.crudexample.Services.ProductService;
+
 import com.curdexample.crudexample.Services.ProductServiceInter;
 import com.curdexample.crudexample.entities.Product;
 import io.swagger.annotations.Api;
@@ -12,26 +12,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@RequestMapping("/product")
-@Api(value = "Product Service", description = "My Product Service")
+
+@Api(value = "Product Service",tags={"Product Controller"})
 
 
 public class MyController {
-    private static final Logger logger= LoggerFactory.getLogger(MyController.class);
-  @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(MyController.class);
+    @Autowired
     private ProductServiceInter productServiceInter;
 // Api of Products-get,post,put,delete,patch
-
 
     @GetMapping("/product")
     @ApiOperation(value = "Search Product api")
     public ResponseEntity<?> getproduct(@RequestParam(required = false) String productId) {
         logger.info("Fetching the data");
-        if(productId!=null) {
+        if (productId != null) {
             return new ResponseEntity<>(this.productServiceInter.getProduct(Integer.parseInt(productId)), HttpStatus.OK);
-        }
-        else
-            return new ResponseEntity<>( this.productServiceInter.getProduct(),HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(this.productServiceInter.getProduct(), HttpStatus.OK);
     }
 
     @PostMapping("/product")
@@ -48,13 +46,11 @@ public class MyController {
 
     @PutMapping("/product/{id}")
     @ApiOperation(value = "Update Product api")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product,@PathVariable(value = "id") int productId)
-    {
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable(value = "id") int productId) {
         try {
-            Product product1=this.productServiceInter.updateProduct(product,productId);
-            return new ResponseEntity<Product>(product1,HttpStatus.FOUND);
-        }catch (Exception e)
-        {
+            Product product1 = this.productServiceInter.updateProduct(product, productId);
+            return new ResponseEntity<Product>(product1, HttpStatus.FOUND);
+        } catch (Exception e) {
             logger.error("unable to update");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -62,36 +58,24 @@ public class MyController {
 
     @DeleteMapping("product/{id}")
     @ApiOperation(value = "Delete Product api")
-    public ResponseEntity<String> deleteProduct(@PathVariable(value = "id") int productId)
-    {
+    public ResponseEntity<String> deleteProduct(@PathVariable(value = "id") int productId) {
         try {
             String s = this.productServiceInter.deleteProduct(productId);
             return new ResponseEntity<>(s, HttpStatus.FOUND);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             logger.error("unable to delete");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-   @PatchMapping("/product/{id}")
-    public ResponseEntity<Product> patchProduct(@RequestBody Product product,@PathVariable(value="id") int productId)
-    {
+    @PatchMapping("/product/{id}")
+    public ResponseEntity<Product> patchProduct(@RequestBody Product product, @PathVariable(value = "id") int productId) {
         try {
-            Product product1=productServiceInter.patchProduct(product,productId);
-            return new ResponseEntity<>(product1,HttpStatus.FOUND);
-        }catch (Exception e)
-        {
+            Product product1 = productServiceInter.patchProduct(product, productId);
+            return new ResponseEntity<>(product1, HttpStatus.FOUND);
+        } catch (Exception e) {
             logger.error("unable to patch data");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-//   For Exception Handling
-//    @ResponseStatus(value =HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(value =Exception.class)
-//    public String exceptionHandlerGeneric()
-//    {
-//        return "Exception Found";
-//    }
 }

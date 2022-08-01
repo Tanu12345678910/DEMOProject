@@ -1,4 +1,5 @@
 package com.curdexample.crudexample.entities;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -7,30 +8,30 @@ import java.util.Date;
 @Entity
 @Table
 public class Category {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int categoryId;
-        @Column
-        private String categoryName;
-        @Column
-        private String categoryDescription;
-        @Column
-        @JsonFormat(pattern ="dd-MM-yyyy")
-         private  Date createDate=new Date(System.currentTimeMillis());
-        @Column
-        @JsonFormat(pattern = "dd-MM-yyyy")
-        private Date updateDate=new Date(System.currentTimeMillis());
-        @Column
-        private  boolean isActive=true;
-        @Column
-        private boolean isDeleted=false;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int categoryId;
+    @Column
+    private String categoryName;
+    @Column
+    private String categoryDescription;
+    @Column
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Date createDate = new Date(System.currentTimeMillis());
+    @Column
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private Date updateDate = new Date(System.currentTimeMillis());
+    @Column
+    private boolean isActive = true;
+    @Column
+    private boolean isDeleted = false;
 
 
     public Category() {
     }
 
 
-    public Category( String categoryName, String categoryDescription) {
+    public Category(String categoryName, String categoryDescription) {
         this.categoryName = categoryName;
         this.categoryDescription = categoryDescription;
     }
@@ -59,7 +60,7 @@ public class Category {
         this.categoryDescription = categoryDescription;
     }
 
-       public Date getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
@@ -70,6 +71,7 @@ public class Category {
     public Date getUpdateDate(Date updateDate) {
         return updateDate;
     }
+
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }

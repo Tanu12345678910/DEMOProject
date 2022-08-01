@@ -1,7 +1,10 @@
 package com.curdexample.crudexample.entities;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
+
 @Entity
 @Table
 public class Product {
@@ -12,7 +15,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productId;
     @Column
-    private  String productName;
+    private String productName;
     @Column
     private String productDescription;
     @Column
@@ -20,15 +23,15 @@ public class Product {
     @Column
     //@Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date createDate=new Date(System.currentTimeMillis());
+    private Date createDate = new Date(System.currentTimeMillis());
     @Column
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date updateDate=new Date(System.currentTimeMillis());
+    private Date updateDate = new Date(System.currentTimeMillis());
     @Column
-    private boolean isActive=true;
+    private boolean isActive = true;
 
-    public Product( int productId,String productName, String productDescription, int price) {
-       this.productId=productId;
+    public Product(int productId, String productName, String productDescription, int price) {
+        this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
@@ -36,7 +39,8 @@ public class Product {
     }
 
     @Column
-    private boolean isDeleted=false;
+    private boolean isDeleted = false;
+
     public int getProductId() {
         return productId;
     }
@@ -44,6 +48,7 @@ public class Product {
     public void setProductId(int productId) {
         this.productId = productId;
     }
+
     public String getProductName() {
         return productName;
     }
@@ -63,30 +68,39 @@ public class Product {
     public int getPrice() {
         return price;
     }
+
     public void setPrice(int price) {
         this.price = price;
     }
+
     public Date getCreateDate() {
         return createDate;
     }
+
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
+
     public Date getUpdateDate(Date updateDate) {
         return updateDate;
     }
+
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+
     public boolean isActive() {
         return isActive;
     }
+
     public void setActive(boolean active) {
         isActive = active;
     }
+
     public boolean isDeleted() {
         return isDeleted;
     }
+
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }

@@ -1,4 +1,5 @@
 package com.curdexample.crudexample.Services;
+
 import com.curdexample.crudexample.Exception.ResourceNotFoundException;
 import com.curdexample.crudexample.dao.CategoryDao;
 import com.curdexample.crudexample.entities.Category;
@@ -9,44 +10,48 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class CategoryService implements CategorySeviceInter{
+public class CategoryService implements CategorySeviceInter {
     @Autowired
     private CategoryDao categoryDao;
+
     @Override
     public List<Category> getCategory() {
         return categoryDao.findAll();
     }
+
     @Override
     public Category getCategory(int categoryId) {
-      return categoryDao.findById(categoryId).get();
+        return categoryDao.findById(categoryId).get();
     }
+
     @Override
     public Category addCategory(Category category) {
         categoryDao.save(category);
 
         return category;
     }
+
     @Override
     public String deleteCategory(int categoryId) {
         categoryDao.deleteCategoryById(categoryId);
         return "deleted";
 
     }
+
     @Override
     public Category updateCategory(Category category, int categoryId) {
         Category update;
-        if(categoryDao.findById(categoryId).isPresent()) {
+        if (categoryDao.findById(categoryId).isPresent()) {
             update = categoryDao.findById(categoryId).get();
             update.setCategoryName(category.getCategoryName());
             update.setCategoryDescription(category.getCategoryDescription());
             update.setCreateDate(category.getCreateDate());
-            Date date= new Date(System.currentTimeMillis());
+            Date date = new Date(System.currentTimeMillis());
             update.setUpdateDate(date);
             update.setActive(category.isActive());
             update.setDeleted(category.isDeleted());
             categoryDao.save(update);
-        }
-        else {
+        } else {
             throw new ResourceNotFoundException();
         }
         return update;
