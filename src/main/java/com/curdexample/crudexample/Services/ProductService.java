@@ -5,8 +5,7 @@ import com.curdexample.crudexample.dao.ProductDao;
 import com.curdexample.crudexample.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,8 +43,7 @@ public class ProductService implements ProductServiceInter {
             update.setProductName(product.getProductName());
             update.setProductDescription(product.getProductDescription());
             update.setPrice(product.getPrice());
-            // update.setCreateDate(product.getCreateDate());updateDate=new Date(System.currentTimeMillis());
-            Date date = new Date(System.currentTimeMillis());
+            LocalDate date =LocalDate.now();
             update.setUpdateDate(date);
             update.setActive(product.isActive());
             update.setDeleted(product.isDeleted());
@@ -74,7 +72,7 @@ public class ProductService implements ProductServiceInter {
             patchupdate.setProductName(product.getProductName());
             patchupdate.setProductDescription(product.getProductDescription());
             patchupdate.setPrice(product.getPrice());
-            Date date = new Date(System.currentTimeMillis());
+            LocalDate date = LocalDate.now();
             patchupdate.setUpdateDate(date);
             patchupdate.setActive(product.isActive());
             patchupdate.setDeleted(product.isDeleted());

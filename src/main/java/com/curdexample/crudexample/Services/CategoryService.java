@@ -6,6 +6,7 @@ import com.curdexample.crudexample.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class CategoryService implements CategorySeviceInter {
             update.setCategoryName(category.getCategoryName());
             update.setCategoryDescription(category.getCategoryDescription());
             update.setCreateDate(category.getCreateDate());
-            Date date = new Date(System.currentTimeMillis());
+            LocalDate date = LocalDate.now();
             update.setUpdateDate(date);
             update.setActive(category.isActive());
             update.setDeleted(category.isDeleted());
