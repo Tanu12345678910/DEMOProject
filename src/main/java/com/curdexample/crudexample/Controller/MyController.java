@@ -10,12 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
-
 @Api(value = "Product Service",tags={"Product Controller"})
-
-
 public class MyController {
     private static final Logger logger = LoggerFactory.getLogger(MyController.class);
     @Autowired
