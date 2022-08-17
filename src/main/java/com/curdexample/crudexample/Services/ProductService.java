@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +24,15 @@ public class ProductService implements ProductServiceInter {
      */
     @Override
     public List<Product> getProduct() {
-        return productDao.findAll();
+        List<Product> list=productDao.findAll();
+        List<Product> list1= new ArrayList<Product>();
+        for (Product pro:list) {
+            if(pro.isDeleted()==false)
+            {
+                list1.add(getProduct(pro.getProductId()));
+            }
+        }
+        return list1;
     }
 
     /**
@@ -41,6 +50,7 @@ public class ProductService implements ProductServiceInter {
             throw new ResourceNotFoundException();
         }
         return product;
+
     }
 
     /**
@@ -132,8 +142,10 @@ public class ProductService implements ProductServiceInter {
             int len = product.getProductName().length();
             String s = product.getProductName();
             for (int i = 0; i < len; i++) {
-                if (Character.isLetterOrDigit(s.charAt(i)) == false) {
-                    throw new RuntimeException("ProductName should contain Letters only");
+                if (Character.isLetterOrDigit(s.charAt(i)) == false ) {
+                    if (s.charAt(i)!=' ') {
+                        throw new RuntimeException("ProductName should contain Letters only");
+                    }
                 }
             }
             return product;
