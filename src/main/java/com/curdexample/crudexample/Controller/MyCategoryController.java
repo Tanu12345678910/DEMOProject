@@ -1,19 +1,22 @@
 package com.curdexample.crudexample.Controller;
 
+import com.curdexample.crudexample.BaseResponse;
 import com.curdexample.crudexample.Services.CategorySeviceInter;
 import com.curdexample.crudexample.entities.Category;
+import com.curdexample.crudexample.entities.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
-//@RequestMapping("/category")
-@Api(value = "Category Service",tags = {"Category Controller"})
+@RequestMapping("/category")
+@Api(value = "Category Service", tags = {"Category Controller"})
 
 
 public class MyCategoryController {
@@ -21,48 +24,90 @@ public class MyCategoryController {
     @Autowired
     private CategorySeviceInter categorySeviceInter;
 
-    @GetMapping("/category")
+    /**
+     * This is controller used for fetching Category with id or without ID
+     *
+     * @param categoryId
+     */
+    @GetMapping
     @ApiOperation(value = "Search Category api")
-    public ResponseEntity<?> getCategory(@RequestParam(required = false) String categoryId) {
-        logger.info("Calling and starting getAllCategoryAndByID()");
-        if (categoryId != null) {
-            return new ResponseEntity<>(this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)), HttpStatus.FOUND);
-        } else {
-            return new ResponseEntity<>(this.categorySeviceInter.getCategory(), HttpStatus.OK);
+    public BaseResponse getCategory(@RequestParam(required = false) String categoryId) {
+        try {
+            if (categoryId != null) {
+                logger.info("Fetched Category by Id");
+                return new BaseResponse("Id Data Fetched", HttpStatus.OK, this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)));
+            } else {
+                logger.info("Fetched All Category");
+                return new BaseResponse("All data Fetched Successfully", HttpStatus.OK, this.categorySeviceInter.getCategory());
+            }
+        } catch (Exception e) {
+            logger.error("id does not exist {}", e.getMessage());
+            return new BaseResponse("id does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/category")
+    /**
+     * This is controller used for saving category
+     *
+     * @param category
+     */
+    @PostMapping
     @ApiOperation(value = "Store Category api")
-    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+    public BaseResponse addCategory(@Valid @RequestBody Category category) {
         try {
-            return new ResponseEntity<>(this.categorySeviceInter.addCategory(category), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Unable to add");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            logger.info("Category added");
+            Category c=this.categorySeviceInter.CheckNameCategory(category);
+            return new BaseResponse("Added successfully", HttpStatus.OK, this.categorySeviceInter.addCategory(category));
+        }catch (IllegalArgumentException exc)
+        {
+            logger.error("Name is Null");
+            return new BaseResponse("Category Name is null",HttpStatus.BAD_REQUEST);
+        }
+        catch (RuntimeException ex)
+        {
+            logger.error("Unable to add as Name of product containing something other than letter");
+            return new BaseResponse("Unable to add as Name of product containing something other than letter",HttpStatus.BAD_REQUEST);
+
+        }
+        catch (Exception e) {
+            logger.error("Unable to add {}", e.getMessage());
+            return new BaseResponse("Not able to add", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping("category/{id}")
+    /**
+     * This is controller used for Deleting category of particular id
+     *
+     * @param categoryId
+     */
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete Product api")
-    public ResponseEntity<String> deleteCategory(@PathVariable(value = "id") int categoryId) {
+    public BaseResponse deleteCategory(@PathVariable(value = "id") int categoryId) {
         try {
+            logger.info("deleted product");
             String s = this.categorySeviceInter.deleteCategory(categoryId);
-            return new ResponseEntity<>(s, HttpStatus.FOUND);
+            return new BaseResponse("Deleted Successfully", HttpStatus.OK, s);
         } catch (Exception e) {
-            logger.error("Unable to delete");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            logger.error("Unable to delete {}", e.getMessage());
+            return new BaseResponse("Id does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/category/{id}")
+    /**
+     * This is controller used for updating category
+     *
+     * @param category
+     * @param categoryId
+     */
+    @PutMapping("/{id}")
     @ApiOperation(value = "Update Category api")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable(value = "id") int categoryId) {
+    public BaseResponse updateCategory(@RequestBody Category category, @PathVariable(value = "id") int categoryId) {
         try {
-            return new ResponseEntity<>(this.categorySeviceInter.updateCategory(category, categoryId), HttpStatus.OK);
+            logger.info("Update category");
+            return new BaseResponse("Update Successfully", HttpStatus.OK, this.categorySeviceInter.updateCategory(category, categoryId));
         } catch (Exception e) {
             logger.error("Unable to update");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new BaseResponse("Id does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 }

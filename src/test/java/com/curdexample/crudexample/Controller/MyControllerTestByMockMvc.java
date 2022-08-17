@@ -1,6 +1,7 @@
 package com.curdexample.crudexample.Controller;
 
 import com.curdexample.crudexample.Services.ProductService;
+import com.curdexample.crudexample.dto.Productdto;
 import com.curdexample.crudexample.entities.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -67,21 +68,22 @@ class MyControllerTestByMockMvc {
                 .andDo(print());
     }
 
-    @Test
-    void addProduct() throws Exception {
-        Product products = new Product(4, "Chocolate Shake", "I love Chocolates", 180);
-        Mockito.when(productService.addProduct(any())).thenReturn(products);
-        //objectMapper is used to serialize Java Object to JSON
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        String jsonBody = mapper.writeValueAsString(products);
-        this.mockMvc.perform(
-                        post("/product").content(jsonBody)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isFound())
-                .andDo(print());
-    }
+//
+//@Test
+//void addProduct() throws Exception {
+//    Productdto products = new Productdto( "Chocolate Shake", "I love Chocolates", 180);
+//    Mockito.when(productService.addProduct(any())).thenReturn(products);
+//    //objectMapper is used to serialize Java Object to JSON
+//    ObjectMapper mapper = new ObjectMapper();
+//    mapper.registerModule(new JavaTimeModule());
+//    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//    String jsonBody = mapper.writeValueAsString(products);
+//    this.mockMvc.perform(
+//                    post("/product").content(jsonBody)
+//                            .contentType(MediaType.APPLICATION_JSON))
+//            .andExpect(status().isCreated())
+//            .andDo(print());
+//}
 
     @Test
     void updateProduct() throws Exception {
@@ -95,7 +97,7 @@ class MyControllerTestByMockMvc {
         this.mockMvc.perform
                         (put("/product/{id}", productId).content(jsonBody)
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isFound())
+                .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath(".productName").value("Chocolate Shake"))
                 .andExpect(MockMvcResultMatchers.jsonPath(".productDescription").value("I love Chocolates"))
                 .andExpect(MockMvcResultMatchers.jsonPath(".price").value(180)).andDo(print());

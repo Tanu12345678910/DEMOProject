@@ -14,4 +14,6 @@ public interface CategorySeviceInter {
     public String deleteCategory(int categoryId);
 
     public Category updateCategory(Category category, int categoryId);
+
+    Category CheckNameCategory(Category category);
 }

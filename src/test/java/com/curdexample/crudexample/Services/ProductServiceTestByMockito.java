@@ -1,10 +1,13 @@
 package com.curdexample.crudexample.Services;
 import com.curdexample.crudexample.dao.ProductDao;
+import com.curdexample.crudexample.dto.Productdto;
 import com.curdexample.crudexample.entities.Product;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +34,20 @@ class ProductServiceTestByMockito {
         List<Product> actualResult = productService.getProduct();
         assertEquals(expectedResult, actualResult);
     }
-
-    @Test
-    void addProduct() {
-        Product expectedResult = new Product(1, "Banana Shake", "I do not like Banana shake", 120);
-        Mockito.when(productDao.save(any())).thenReturn(expectedResult);
-        Product actualResult = productService.addProduct(expectedResult);
-        assertEquals(expectedResult, actualResult);
-    }
-
+//@Test
+//void addProduct() {
+//    Product expectedResult = new Product(1, "Banana Shake", "I do not like Banana shake", 120);
+//    Mockito.when(productDao.save(any())).thenReturn(expectedResult);
+//    Product actualResult = productService.addProduct(expectedResult);
+//    assertEquals(expectedResult, actualResult);
+//}
+@Test
+void addProduct() {
+    Productdto expectedResult = new Productdto("Banana Shake", "I do not like Banana shake", 120);
+    Mockito.when(productDao.save(any())).thenReturn(expectedResult);
+    Productdto actualResult = productService.addProduct(expectedResult);
+    assertEquals(expectedResult, actualResult);
+}
     @Test
     void updateProduct() {
         Product expectedResult = new Product(2, "Orange Juice", "Sometime I drink it", 150);
