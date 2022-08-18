@@ -22,10 +22,10 @@ class ProductServiceTestByMockito {
     ProductDao productDao;
     @InjectMocks
     ProductService productService;
-    @Mock
-    Productdto productdto;
-    @Mock
-    ModelMapper modelMapper;
+//    @Mock
+//    Productdto productdto;
+//    @Mock
+//    ModelMapper modelMapper;
 
     @Test
     void getProduct() {
@@ -38,31 +38,21 @@ class ProductServiceTestByMockito {
         List<Product> actualResult = productService.getProduct();
         assertEquals(expectedResult, actualResult);
     }
-//@Test
-//void addProduct() {
-//    Product expectedResult = new Product(1, "Banana Shake", "I do not like Banana shake", 120);
-//    Mockito.when(productDao.save(any())).thenReturn(expectedResult);
-//    Product actualResult = productService.addProduct(expectedResult);
-//    assertEquals(expectedResult, actualResult);
-//}
-//@Test
-//void addProduct() {
-//    Productdto expectedResult = new Productdto("Banana Shake", "I do not like Banana shake", 120);
-//    Product Result = new Product(1,"Banana Shake", "I do not like Banana shake", 120);
-//    Mockito.when(productService.dtoToProduct(any())).thenReturn(Result);
-//    Mockito.when(productService.productToDto(any())).thenReturn(expectedResult);
-//    Mockito.when(productDao.save(any())).thenReturn(expectedResult);
-//    Productdto actualResult = productService.addProduct(expectedResult);
-//    assertEquals(expectedResult.getProductName(), actualResult.getProductName());
-//}
     @Test
-    void updateProduct() {
-        Product expectedResult = new Product(2, "Orange Juice", "Sometime I drink it", 150);
-        Mockito.when(productDao.findById(expectedResult.getProductId())).thenReturn(Optional.of(expectedResult));
-        Mockito.when(productDao.save(any())).thenReturn(expectedResult);
-        Product actualResult = productService.updateProduct(expectedResult, expectedResult.getProductId());
-        assertEquals(actualResult.getProductId(), expectedResult.getProductId());
-    }
+void addProduct() {
+   Productdto expectedResult = new Productdto( "Banana Shake", "I do not like Banana shake", 120);
+    Mockito.when(productDao.save(any())).thenReturn(expectedResult);
+    Productdto actualResult = productService.addProduct(expectedResult);
+    assertEquals(expectedResult, actualResult);
+}
+//    @Test
+//    void updateProduct() {
+//        Productdto expectedResult = new Productdto("Orange Juice", "Sometime I drink it", 150);
+//        Mockito.when(productDao.findById(expectedResult.getProductId())).thenReturn(Optional.of(expectedResult));
+//        Mockito.when(productDao.save(any())).thenReturn(expectedResult);
+//        Product actualResult = productService.updateProduct(expectedResult, expectedResult.getProductId());
+//        assertEquals(actualResult.getProductId(), expectedResult.getProductId());
+//    }
 
     @Test
     void deleteProduct() {

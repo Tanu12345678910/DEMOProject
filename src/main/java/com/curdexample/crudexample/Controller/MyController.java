@@ -72,19 +72,20 @@ public class MyController {
 
     /**
      * This is the controller used to update the product of particular id
+     *
      * @param product
      * @param productId
      */
     @PutMapping("/{id}")
     @ApiOperation(value = "Update Product api")
-    public BaseResponse updateProduct(@RequestBody Product product, @PathVariable(value = "id") int productId) {
+    public BaseResponse updateProduct(@RequestBody Productdto product, @PathVariable(value = "id") int productId) {
         try {
             Product product1 = this.productServiceInter.updateProduct(product, productId);
             logger.info("Product added successfully");
             return new BaseResponse("Updated successfully", HttpStatus.CREATED, product1);
         } catch (Exception e) {
             logger.error("unable to update");
-            return new BaseResponse("Unable to Update", HttpStatus.NOT_FOUND);
+            return new BaseResponse("Unable to Update", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -118,7 +119,7 @@ public class MyController {
         try {
             if (productId == 0) {
                 logger.error("Can not perform patch operation on product");
-                return new BaseResponse("Can not perform Patch Operation", HttpStatus.BAD_REQUEST);
+                return new BaseResponse("Can not perform Patch Operation", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             Product product1 = productServiceInter.patchProduct(product, productId);
             return new BaseResponse("Updated successfully", HttpStatus.OK, product1);

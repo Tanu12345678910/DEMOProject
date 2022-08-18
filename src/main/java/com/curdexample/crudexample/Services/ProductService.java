@@ -16,19 +16,19 @@ import java.util.List;
 public class ProductService implements ProductServiceInter {
     @Autowired
     private ProductDao productDao;
-    @Autowired
-    private ModelMapper modelMapper;
+    //    @Autowired
+//    private ModelMapper modelMapper;
+    private ModelMapper modelMapper = new ModelMapper();
 
     /**
      * This is the service method for fetching all product data
      */
     @Override
     public List<Product> getProduct() {
-        List<Product> list=productDao.findAll();
-        List<Product> list1= new ArrayList<Product>();
-        for (Product pro:list) {
-            if(pro.isDeleted()==false)
-            {
+        List<Product> list = productDao.findAll();
+        List<Product> list1 = new ArrayList<Product>();
+        for (Product pro : list) {
+            if (pro.isDeleted() == false) {
                 list1.add(getProduct(pro.getProductId()));
             }
         }
@@ -74,8 +74,8 @@ public class ProductService implements ProductServiceInter {
      * @throws ResourceNotFoundException
      */
     @Override
-    public Product updateProduct(Product product, int productId) throws ResourceNotFoundException {
-        Product update;
+    public Product updateProduct(Productdto product, int productId) throws ResourceNotFoundException {
+        Product update = this.dtoToProduct(product);
         if (productDao.findById(productId).isPresent()) {
             update = productDao.findById(productId).get();
             update.setProductName(product.getProductName());
@@ -83,9 +83,10 @@ public class ProductService implements ProductServiceInter {
             update.setPrice(product.getPrice());
             LocalDate date = LocalDate.now();
             update.setUpdateDate(date);
-            update.setActive(product.isActive());
-            update.setDeleted(product.isDeleted());
+            update.setActive(update.isActive());
+            update.setDeleted(update.isDeleted());
             productDao.save(update);
+
         } else {
             throw new ResourceNotFoundException();
         }
@@ -142,8 +143,8 @@ public class ProductService implements ProductServiceInter {
             int len = product.getProductName().length();
             String s = product.getProductName();
             for (int i = 0; i < len; i++) {
-                if (Character.isLetterOrDigit(s.charAt(i)) == false ) {
-                    if (s.charAt(i)!=' ') {
+                if (Character.isLetterOrDigit(s.charAt(i)) == false) {
+                    if (s.charAt(i) != ' ') {
                         throw new RuntimeException("ProductName should contain Letters only");
                     }
                 }
@@ -151,13 +152,14 @@ public class ProductService implements ProductServiceInter {
             return product;
         }
     }
-    public Product dtoToProduct(Productdto productdto){
-        Product product=this.modelMapper.map(productdto,Product.class);
+
+    public Product dtoToProduct(Productdto productdto) {
+        Product product = this.modelMapper.map(productdto, Product.class);
         return product;
     }
-    public Productdto productToDto(Product product)
-    {
-        Productdto productdto=this.modelMapper.map(product,Productdto.class);
+
+    public Productdto productToDto(Product product) {
+        Productdto productdto = this.modelMapper.map(product, Productdto.class);
         return productdto;
     }
 }

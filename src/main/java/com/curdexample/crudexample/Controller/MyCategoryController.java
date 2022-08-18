@@ -3,7 +3,6 @@ package com.curdexample.crudexample.Controller;
 import com.curdexample.crudexample.BaseResponse;
 import com.curdexample.crudexample.Services.CategorySeviceInter;
 import com.curdexample.crudexample.entities.Category;
-import com.curdexample.crudexample.entities.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -56,20 +55,16 @@ public class MyCategoryController {
     public BaseResponse addCategory(@Valid @RequestBody Category category) {
         try {
             logger.info("Category added");
-            Category c=this.categorySeviceInter.CheckNameCategory(category);
+            Category c = this.categorySeviceInter.CheckNameCategory(category);
             return new BaseResponse("Added successfully", HttpStatus.OK, this.categorySeviceInter.addCategory(category));
-        }catch (IllegalArgumentException exc)
-        {
+        } catch (IllegalArgumentException exc) {
             logger.error("Name is Null");
-            return new BaseResponse("Category Name is null",HttpStatus.BAD_REQUEST);
-        }
-        catch (RuntimeException ex)
-        {
+            return new BaseResponse("Category Name is null", HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException ex) {
             logger.error("Unable to add as Name of product containing something other than letter");
-            return new BaseResponse("Unable to add as Name of product containing something other than letter",HttpStatus.BAD_REQUEST);
+            return new BaseResponse("Unable to add as Name of product containing something other than letter", HttpStatus.BAD_REQUEST);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Unable to add {}", e.getMessage());
             return new BaseResponse("Not able to add", HttpStatus.BAD_REQUEST);
         }

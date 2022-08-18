@@ -3,7 +3,6 @@ package com.curdexample.crudexample.Services;
 import com.curdexample.crudexample.Exception.ResourceNotFoundException;
 import com.curdexample.crudexample.dao.CategoryDao;
 import com.curdexample.crudexample.entities.Category;
-import com.curdexample.crudexample.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +20,10 @@ public class CategoryService implements CategorySeviceInter {
      */
     @Override
     public List<Category> getCategory() {
-        List<Category>list= categoryDao.findAll();
-        List<Category>list1=new ArrayList<Category>();
-        for (Category c:list){
-            if(c.isDeleted()==false)
-            {
+        List<Category> list = categoryDao.findAll();
+        List<Category> list1 = new ArrayList<Category>();
+        for (Category c : list) {
+            if (c.isDeleted() == false) {
                 list1.add(getCategory(c.getCategoryId()));
             }
 
@@ -109,7 +107,7 @@ public class CategoryService implements CategorySeviceInter {
             int len = category.getCategoryName().length();
             String s = category.getCategoryName();
             for (int i = 0; i < len; i++) {
-                if (Character.isLetterOrDigit(s.charAt(i)) == false && s.charAt(i)!=' ') {
+                if (Character.isLetterOrDigit(s.charAt(i)) == false && s.charAt(i) != ' ') {
                     throw new RuntimeException("ProductName should contain Letters only");
                 }
             }
