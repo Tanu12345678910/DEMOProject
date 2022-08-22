@@ -1,5 +1,6 @@
 package com.curdexample.crudexample.Services;
 
+import com.curdexample.crudexample.dto.Categorydto;
 import com.curdexample.crudexample.entities.Category;
 
 import java.util.List;
@@ -9,11 +10,11 @@ public interface CategorySeviceInter {
 
     public Category getCategory(int categoryId);
 
-    public Category addCategory(Category category);
+    public Category addCategory(Categorydto category);
 
     public String deleteCategory(int categoryId);
 
-    public Category updateCategory(Category category, int categoryId);
+    public Category updateCategory(Categorydto category, int categoryId);
 
-    Category CheckNameCategory(Category category);
+    Categorydto CheckNameCategory(Categorydto category);
 }

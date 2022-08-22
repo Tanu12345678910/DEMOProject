@@ -31,9 +31,17 @@ public class MyController {
     public BaseResponse getproduct(@RequestParam(required = false) String productId) {
         try {
             if (productId != null) {
-                logger.info("Fetching the Product data by Id");
-                return new BaseResponse("Data Fetched by Id", HttpStatus.OK, this.productServiceInter.getProduct(Integer.parseInt(productId)));
-            } else {
+                     if(productServiceInter.checkForDelete(productId)==false) {
+                    logger.info("Fetching the Product data by Id");
+                    return new BaseResponse("Data Fetched by Id", HttpStatus.OK, this.productServiceInter.getProduct(Integer.parseInt(productId)));
+                     }
+                     else
+                     {
+                         logger.info("Given id is not exist");
+                         return new BaseResponse("This Id product is Deleted", HttpStatus.OK);
+
+                     }
+                } else {
                 logger.info("Fetching the all product data");
                 return new BaseResponse("All Data Fetched", HttpStatus.OK, this.productServiceInter.getProduct());
             }

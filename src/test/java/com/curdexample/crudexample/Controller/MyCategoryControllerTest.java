@@ -1,6 +1,7 @@
 package com.curdexample.crudexample.Controller;
 
 import com.curdexample.crudexample.Services.CategoryService;
+import com.curdexample.crudexample.dto.Categorydto;
 import com.curdexample.crudexample.entities.Category;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -65,12 +66,13 @@ class MyCategoryControllerTest {
 
     @Test
     void addCategory() throws Exception {
+        Categorydto categorydto = new Categorydto("Mouse", "pointing Device");
         Category category = new Category("Mouse", "pointing Device");
         Mockito.when(categoryService.addCategory(any())).thenReturn(category);
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        String jsonBody = mapper.writeValueAsString(category);
+        String jsonBody = mapper.writeValueAsString(categorydto);
         this.mockMvc.perform(post("/category").content(jsonBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath(".categoryName").value("Mouse"))

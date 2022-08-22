@@ -7,12 +7,8 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class CurdexApplication {
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         SpringApplication.run(CurdexApplication.class, args);
-    }
-
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
     }
 }

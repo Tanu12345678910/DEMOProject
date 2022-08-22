@@ -11,7 +11,7 @@ public interface ProductServiceInter {
     public Product getProduct(int productId);
 
     public Productdto addProduct(Productdto productdto);
-
+    public boolean checkForDelete(String productId);
 
     public Product updateProduct(Productdto product, int productId);
 

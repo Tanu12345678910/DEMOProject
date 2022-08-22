@@ -37,5 +37,11 @@ public class Product {
     private boolean isActive = true;
     @Column
     private boolean isDeleted = false;
-
+  public Product(int productId,String productName,String productDescription,int price )
+  {
+      this.productId=productId;
+      this.productName=productName;
+      this.productDescription=productDescription;
+      this.price=price;
+  }
 }

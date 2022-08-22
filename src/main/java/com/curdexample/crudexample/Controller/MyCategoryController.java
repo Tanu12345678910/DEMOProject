@@ -2,6 +2,7 @@ package com.curdexample.crudexample.Controller;
 
 import com.curdexample.crudexample.BaseResponse;
 import com.curdexample.crudexample.Services.CategorySeviceInter;
+import com.curdexample.crudexample.dto.Categorydto;
 import com.curdexample.crudexample.entities.Category;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,10 +53,10 @@ public class MyCategoryController {
      */
     @PostMapping
     @ApiOperation(value = "Store Category api")
-    public BaseResponse addCategory(@Valid @RequestBody Category category) {
+    public BaseResponse addCategory(@Valid @RequestBody Categorydto category) {
         try {
             logger.info("Category added");
-            Category c = this.categorySeviceInter.CheckNameCategory(category);
+            Categorydto c = this.categorySeviceInter.CheckNameCategory(category);
             return new BaseResponse("Added successfully", HttpStatus.OK, this.categorySeviceInter.addCategory(category));
         } catch (IllegalArgumentException exc) {
             logger.error("Name is Null");
@@ -96,7 +97,7 @@ public class MyCategoryController {
      */
     @PutMapping("/{id}")
     @ApiOperation(value = "Update Category api")
-    public BaseResponse updateCategory(@RequestBody Category category, @PathVariable(value = "id") int categoryId) {
+    public BaseResponse updateCategory(@RequestBody Categorydto category, @PathVariable(value = "id") int categoryId) {
         try {
             logger.info("Update category");
             return new BaseResponse("Update Successfully", HttpStatus.OK, this.categorySeviceInter.updateCategory(category, categoryId));

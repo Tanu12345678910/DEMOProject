@@ -1,10 +1,12 @@
 package com.curdexample.crudexample.Services;
 
 import com.curdexample.crudexample.Exception.ResourceNotFoundException;
+import com.curdexample.crudexample.ExternalMethod.ConvertEntityAndDto;
 import com.curdexample.crudexample.dao.ProductDao;
 import com.curdexample.crudexample.dto.Productdto;
 import com.curdexample.crudexample.entities.Product;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,10 @@ import java.util.List;
 public class ProductService implements ProductServiceInter {
     @Autowired
     private ProductDao productDao;
-    //    @Autowired
-//    private ModelMapper modelMapper;
-    private ModelMapper modelMapper = new ModelMapper();
+
+    private ConvertEntityAndDto convertEntityAndDto = new ConvertEntityAndDto();
+    private Product product2 = new Product();
+    private Productdto productdto1 = new Productdto();
 
     /**
      * This is the service method for fetching all product data
@@ -43,16 +46,18 @@ public class ProductService implements ProductServiceInter {
      */
     @Override
     public Product getProduct(int productId) throws ResourceNotFoundException {
-        Product product;
+        Product p = productDao.findById(productId).get();
+        Product pro=null;
         if (productDao.findById(productId).isPresent()) {
-            product = productDao.findById(productId).get();
-        } else {
+            if (p.isDeleted() == false) {
+                 pro= productDao.findById(productId).get();
+            }
+        }
+        else {
             throw new ResourceNotFoundException();
         }
-        return product;
-
+        return pro;
     }
-
     /**
      * This is the service method for adding product data
      *
@@ -60,9 +65,8 @@ public class ProductService implements ProductServiceInter {
      */
     @Override
     public Productdto addProduct(Productdto product) {
-        Product product1 = this.dtoToProduct(product);
-        this.productDao.save(product1);
-        return (this.productToDto(product1));
+        product2=convertEntityAndDto.dtoToProduct(product);
+        return convertEntityAndDto.productToDto( productDao.save(product2));
     }
 
 
@@ -75,7 +79,7 @@ public class ProductService implements ProductServiceInter {
      */
     @Override
     public Product updateProduct(Productdto product, int productId) throws ResourceNotFoundException {
-        Product update = this.dtoToProduct(product);
+          Product update=convertEntityAndDto.dtoToProduct(product);
         if (productDao.findById(productId).isPresent()) {
             update = productDao.findById(productId).get();
             update.setProductName(product.getProductName());
@@ -152,14 +156,11 @@ public class ProductService implements ProductServiceInter {
             return product;
         }
     }
-
-    public Product dtoToProduct(Productdto productdto) {
-        Product product = this.modelMapper.map(productdto, Product.class);
-        return product;
-    }
-
-    public Productdto productToDto(Product product) {
-        Productdto productdto = this.modelMapper.map(product, Productdto.class);
-        return productdto;
+    public boolean checkForDelete(String productId)
+    {
+        boolean b;
+      Product product=productDao.findById(Integer.valueOf(productId)).get();
+      //b=product.isDeleted();
+      return product.isDeleted();
     }
 }

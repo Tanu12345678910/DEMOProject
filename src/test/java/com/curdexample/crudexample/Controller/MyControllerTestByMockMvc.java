@@ -68,22 +68,23 @@ class MyControllerTestByMockMvc {
                 .andDo(print());
     }
 
-//
-//@Test
-//void addProduct() throws Exception {
-//    Productdto products = new Productdto( "Chocolate Shake", "I love Chocolates", 180);
-//    Mockito.when(productService.addProduct(any())).thenReturn(products);
-//    //objectMapper is used to serialize Java Object to JSON
-//    ObjectMapper mapper = new ObjectMapper();
-//    mapper.registerModule(new JavaTimeModule());
-//    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//    String jsonBody = mapper.writeValueAsString(products);
-//    this.mockMvc.perform(
-//                    post("/product").content(jsonBody)
-//                            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isCreated())
-//            .andDo(print());
-//}
+
+@Test
+void addProduct() throws Exception {
+    Product products = new Product(1, "Chocolate Shake", "I love Chocolates", 180);
+    Productdto productdto = new Productdto( "Chocolate Shake", "I love Chocolates", 180);
+    Mockito.when(productService.addProduct(any())).thenReturn(productdto);
+    //objectMapper is used to serialize Java Object to JSON
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new JavaTimeModule());
+    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    String jsonBody = mapper.writeValueAsString(products);
+    this.mockMvc.perform(
+                    post("/product").content(jsonBody)
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andDo(print());
+}
 
     @Test
     void updateProduct() throws Exception {
@@ -97,7 +98,7 @@ class MyControllerTestByMockMvc {
         this.mockMvc.perform
                         (put("/product/{id}", productId).content(jsonBody)
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath(".productName").value("Chocolate Shake"))
                 .andExpect(MockMvcResultMatchers.jsonPath(".productDescription").value("I love Chocolates"))
                 .andExpect(MockMvcResultMatchers.jsonPath(".price").value(180)).andDo(print());

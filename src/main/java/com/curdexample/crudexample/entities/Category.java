@@ -35,4 +35,9 @@ public class Category {
     private boolean isActive = true;
     @Column
     private boolean isDeleted = false;
+
+    public Category(String categoryName, String categoryDescription) {
+        this.categoryName = categoryName;
+        this.categoryDescription = categoryDescription;
+    }
 }

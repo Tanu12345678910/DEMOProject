@@ -1,8 +1,11 @@
 package com.curdexample.crudexample.Services;
 
 import com.curdexample.crudexample.Exception.ResourceNotFoundException;
+import com.curdexample.crudexample.ExternalMethod.ConvertEntityAndDto;
 import com.curdexample.crudexample.dao.CategoryDao;
+import com.curdexample.crudexample.dto.Categorydto;
 import com.curdexample.crudexample.entities.Category;
+import com.curdexample.crudexample.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ import java.util.List;
 public class CategoryService implements CategorySeviceInter {
     @Autowired
     private CategoryDao categoryDao;
+    private ConvertEntityAndDto convertEntityAndDto=new ConvertEntityAndDto();
+    private Category category1=new Category();
 
     /**
      * This is the service method for getting  all data of category
@@ -50,10 +55,10 @@ public class CategoryService implements CategorySeviceInter {
      * @param category
      */
     @Override
-    public Category addCategory(Category category) {
-        try {
-            categoryDao.save(category);
-            return category;
+    public Category addCategory(Categorydto category) {
+         try {
+              Category category1=convertEntityAndDto.dtoToCategory(category);
+             return categoryDao.save(category1);
         } catch (Exception e) {
             throw new ResourceNotFoundException();
         }
@@ -81,17 +86,16 @@ public class CategoryService implements CategorySeviceInter {
      * @param categoryId
      */
     @Override
-    public Category updateCategory(Category category, int categoryId) {
-        Category update;
+    public Category updateCategory(Categorydto category, int categoryId) {
+        Category update=convertEntityAndDto.dtoToCategory(category);
         if (categoryDao.findById(categoryId).isPresent()) {
             update = categoryDao.findById(categoryId).get();
             update.setCategoryName(category.getCategoryName());
             update.setCategoryDescription(category.getCategoryDescription());
-            update.setCreateDate(category.getCreateDate());
             LocalDate date = LocalDate.now();
             update.setUpdateDate(date);
-            update.setActive(category.isActive());
-            update.setDeleted(category.isDeleted());
+            update.setActive(update.isActive());
+            update.setDeleted(update.isDeleted());
             categoryDao.save(update);
         } else {
             throw new ResourceNotFoundException();
@@ -100,7 +104,7 @@ public class CategoryService implements CategorySeviceInter {
     }
 
     @Override
-    public Category CheckNameCategory(Category category) {
+    public Categorydto CheckNameCategory(Categorydto category) {
         if (category.getCategoryName() == null) {
             throw new IllegalArgumentException("Category name is null");
         } else {

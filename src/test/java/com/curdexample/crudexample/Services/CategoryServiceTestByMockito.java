@@ -1,6 +1,7 @@
 package com.curdexample.crudexample.Services;
 
 import com.curdexample.crudexample.dao.CategoryDao;
+import com.curdexample.crudexample.dto.Categorydto;
 import com.curdexample.crudexample.entities.Category;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static net.bytebuddy.matcher.ElementMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -49,12 +51,15 @@ class CategoryServiceTestByMockito {
 
     @Test
     void addCategory() {
-        Category expectedCategory = new Category();
+        Categorydto expectedCategory = new Categorydto();
         expectedCategory.setCategoryName("Laptop");
         expectedCategory.setCategoryDescription("It is a digital electronic device");
-        Mockito.when(categoryDao.save(expectedCategory)).thenReturn(expectedCategory);
+        Category c=new Category();
+        c.setCategoryName("Laptop");
+        c.setCategoryDescription("It is a digital electronic device");
+        Mockito.when(categoryDao.save(c)).thenReturn(c);
         Category actualCategory = categoryService.addCategory(expectedCategory);
-        assertEquals(actualCategory, expectedCategory);
+        assertEquals(actualCategory.getCategoryName(), expectedCategory.getCategoryName());
     }
 
     @Test
@@ -74,9 +79,10 @@ class CategoryServiceTestByMockito {
         Category expectedCategory = new Category();
         expectedCategory.setCategoryName("Mouse");
         expectedCategory.setCategoryDescription("It is a pointing device");
+          Categorydto c=new Categorydto("Mouse","It is a pointing device");
         Mockito.when(categoryDao.findById(expectedCategory.getCategoryId())).thenReturn(Optional.of(expectedCategory));
-        Category actualCategory = categoryService.updateCategory(expectedCategory, expectedCategory.getCategoryId());
-        assertEquals(actualCategory, expectedCategory);
+        Category actualCategory = categoryService.updateCategory(c, expectedCategory.getCategoryId());
+        assertEquals(actualCategory.getCategoryName(), expectedCategory.getCategoryName());
 
     }
 }
