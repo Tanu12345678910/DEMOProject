@@ -43,10 +43,17 @@ public class CategoryService implements CategorySeviceInter {
      */
     @Override
     public Category getCategory(int categoryId) {
+        Category category = categoryDao.findById(categoryId).get();
+        Category pro=null;
         if (categoryDao.findById(categoryId).isPresent()) {
-            return categoryDao.findById(categoryId).get();
+            if (category.isDeleted() == false) {
+                pro= categoryDao.findById(categoryId).get();
+            }
         }
-        throw new ResourceNotFoundException();
+        else {
+            throw new ResourceNotFoundException();
+        }
+        return pro;
     }
 
     /**
@@ -72,7 +79,7 @@ public class CategoryService implements CategorySeviceInter {
     @Override
     public String deleteCategory(int categoryId) {
         if (categoryDao.findById(categoryId).isPresent()) {
-            categoryDao.deleteCategoryById(categoryId);
+            categoryDao.deleteById(categoryId);
             return "deleted";
         } else {
             throw new ResourceNotFoundException();
@@ -117,5 +124,16 @@ public class CategoryService implements CategorySeviceInter {
             }
             return category;
         }
+    }
+
+    /**
+     * Method for getting isDelete value
+     * @param categoryID
+     * @return
+     */
+    public boolean checkForDelete(String categoryID)
+    {
+        Category category=categoryDao.findById(Integer.valueOf(categoryID)).get();
+        return category.isDeleted();
     }
 }

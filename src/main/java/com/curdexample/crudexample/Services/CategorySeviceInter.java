@@ -17,4 +17,5 @@ public interface CategorySeviceInter {
     public Category updateCategory(Categorydto category, int categoryId);
 
     Categorydto CheckNameCategory(Categorydto category);
+    public boolean checkForDelete(String categoryID);
 }

@@ -34,9 +34,16 @@ public class MyCategoryController {
     public BaseResponse getCategory(@RequestParam(required = false) String categoryId) {
         try {
             if (categoryId != null) {
-                logger.info("Fetched Category by Id");
-                return new BaseResponse("Id Data Fetched", HttpStatus.OK, this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)));
-            } else {
+                if(categorySeviceInter.checkForDelete(categoryId)==false) {
+                    logger.info("Fetched Category by Id");
+                    return new BaseResponse("Id Data Fetched", HttpStatus.OK, this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)));
+                }
+                else
+                {
+                    logger.info("Category id is deleted");
+                    return new BaseResponse("Category of given id is Deleted", HttpStatus.BAD_REQUEST);
+                }
+                } else {
                 logger.info("Fetched All Category");
                 return new BaseResponse("All data Fetched Successfully", HttpStatus.OK, this.categorySeviceInter.getCategory());
             }

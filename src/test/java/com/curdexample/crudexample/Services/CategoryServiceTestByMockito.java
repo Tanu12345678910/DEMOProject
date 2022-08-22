@@ -1,5 +1,6 @@
 package com.curdexample.crudexample.Services;
 
+import com.curdexample.crudexample.ExternalMethod.ConvertEntityAndDto;
 import com.curdexample.crudexample.dao.CategoryDao;
 import com.curdexample.crudexample.dto.Categorydto;
 import com.curdexample.crudexample.entities.Category;
@@ -22,6 +23,8 @@ class CategoryServiceTestByMockito {
     CategoryDao categoryDao;
     @InjectMocks
     CategoryService categoryService;
+    @Mock
+    ConvertEntityAndDto convertEntityAndDto;
 
     @Test
     void getCategory() {
@@ -58,6 +61,7 @@ class CategoryServiceTestByMockito {
         c.setCategoryName("Laptop");
         c.setCategoryDescription("It is a digital electronic device");
         Mockito.when(categoryDao.save(c)).thenReturn(c);
+        Mockito.when(convertEntityAndDto.dtoToCategory(expectedCategory)).thenReturn(c);
         Category actualCategory = categoryService.addCategory(expectedCategory);
         assertEquals(actualCategory.getCategoryName(), expectedCategory.getCategoryName());
     }
@@ -81,6 +85,7 @@ class CategoryServiceTestByMockito {
         expectedCategory.setCategoryDescription("It is a pointing device");
           Categorydto c=new Categorydto("Mouse","It is a pointing device");
         Mockito.when(categoryDao.findById(expectedCategory.getCategoryId())).thenReturn(Optional.of(expectedCategory));
+       Mockito.when(convertEntityAndDto.dtoToCategory(c)).thenReturn(expectedCategory);
         Category actualCategory = categoryService.updateCategory(c, expectedCategory.getCategoryId());
         assertEquals(actualCategory.getCategoryName(), expectedCategory.getCategoryName());
 

@@ -12,6 +12,6 @@ import javax.transaction.Transactional;
 @Transactional
 public interface CategoryDao extends JpaRepository<Category, Integer> {
     @Modifying
-    @Query(value = "update category_product set is_deleted = true where category_id =?1", nativeQuery = true)
-    void deleteCategoryById(int categoryId);
+    @Query(value = "update category set is_deleted = true where category_id =?1", nativeQuery = true)
+    void deleteById(int categoryId);
 }

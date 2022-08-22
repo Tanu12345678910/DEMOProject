@@ -53,6 +53,7 @@ void addProduct() {
           Product p=new Product(1,"Orange Juice", "Sometime I drink it", 150);
         Mockito.when(productDao.findById(p.getProductId())).thenReturn(Optional.of(p));
         Mockito.when(productDao.save(p)).thenReturn(p);
+        Mockito.when(convertEntityAndDto.dtoToProduct(any())).thenReturn(p);
         Product actualResult = productService.updateProduct(expectedResult, p.getProductId());
         assertEquals(actualResult.getProductName(), expectedResult.getProductName());
     }
