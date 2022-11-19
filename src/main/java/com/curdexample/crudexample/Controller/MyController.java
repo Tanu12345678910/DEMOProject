@@ -1,4 +1,5 @@
 package com.curdexample.crudexample.Controller;
+
 import com.curdexample.crudexample.BaseResponse;
 import com.curdexample.crudexample.Services.ProductServiceInter;
 import com.curdexample.crudexample.dto.Productdto;
@@ -9,13 +10,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/product")
 @Api(value = "Product Service", tags = {"Product Controller"})
+
 public class MyController {
     private static final Logger logger = LoggerFactory.getLogger(MyController.class);
     @Autowired
@@ -23,6 +34,7 @@ public class MyController {
 
     /**
      * This is the controller for fetching Product with id or without Id
+     *
      * @param productId
      */
 
@@ -31,17 +43,15 @@ public class MyController {
     public BaseResponse getproduct(@RequestParam(required = false) String productId) {
         try {
             if (productId != null) {
-                     if(productServiceInter.checkForDelete(productId)==false) {
+                if (productServiceInter.checkForDelete(productId) == false) {
                     logger.info("Fetching the Product data by Id");
                     return new BaseResponse("Data Fetched by Id", HttpStatus.OK, this.productServiceInter.getProduct(Integer.parseInt(productId)));
-                     }
-                     else
-                     {
-                         logger.info("Given id is not exist");
-                         return new BaseResponse("This Id product is Deleted", HttpStatus.OK);
-
-                     }
                 } else {
+                    logger.info("Given id is not exist");
+                    return new BaseResponse("This Id product is Deleted", HttpStatus.OK);
+
+                }
+            } else {
                 logger.info("Fetching the all product data");
                 return new BaseResponse("All Data Fetched", HttpStatus.OK, this.productServiceInter.getProduct());
             }
@@ -50,29 +60,27 @@ public class MyController {
             return new BaseResponse("Id not found", HttpStatus.BAD_REQUEST);
         }
     }
+
     /**
      * This is Used for adding
+     *
      * @param product
      */
     @PostMapping
     @ApiOperation(value = "Store Product api")
-    public BaseResponse addProduct( @Valid @RequestBody Productdto product) {
+    public BaseResponse addProduct(@Valid @RequestBody Productdto product) {
         try {
-            Productdto product2=this.productServiceInter.CheckName(product);
+            Productdto product2 = this.productServiceInter.CheckName(product);
             Productdto product1 = this.productServiceInter.addProduct(product);
             logger.info("Product Added successfully");
             return new BaseResponse("Product added successfully", HttpStatus.CREATED, product1);
-        }catch (IllegalArgumentException exc)
-        {
+        } catch (IllegalArgumentException exc) {
             logger.error("Product name field is null");
-            return new BaseResponse("Product name field is null",HttpStatus.BAD_REQUEST);
-        }
-        catch (RuntimeException ex)
-        {
+            return new BaseResponse("Product name field is null", HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException ex) {
             logger.error("Unable to add as Name of product containing something other than letter");
-            return new BaseResponse("Unable to add as Name of product containing something other than letter",HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
+            return new BaseResponse("Unable to add as Name of product containing something other than letter", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
             logger.error("unable to add");
             return new BaseResponse("Product is not added", HttpStatus.BAD_REQUEST);
         }
@@ -99,6 +107,7 @@ public class MyController {
 
     /**
      * This is used to delete the Product of particular id
+     *
      * @param productId
      */
     @DeleteMapping("/{id}")
@@ -119,6 +128,7 @@ public class MyController {
 
     /**
      * This is Patch Controller used for updating
+     *
      * @param product
      * @param productId
      */

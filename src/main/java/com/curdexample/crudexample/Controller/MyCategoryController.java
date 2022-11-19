@@ -3,21 +3,27 @@ package com.curdexample.crudexample.Controller;
 import com.curdexample.crudexample.BaseResponse;
 import com.curdexample.crudexample.Services.CategorySeviceInter;
 import com.curdexample.crudexample.dto.Categorydto;
-import com.curdexample.crudexample.entities.Category;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/category")
 @Api(value = "Category Service", tags = {"Category Controller"})
-
 
 public class MyCategoryController {
     private static final Logger logger = LoggerFactory.getLogger(MyCategoryController.class);
@@ -34,16 +40,14 @@ public class MyCategoryController {
     public BaseResponse getCategory(@RequestParam(required = false) String categoryId) {
         try {
             if (categoryId != null) {
-                if(categorySeviceInter.checkForDelete(categoryId)==false) {
+                if (categorySeviceInter.checkForDelete(categoryId) == false) {
                     logger.info("Fetched Category by Id");
                     return new BaseResponse("Id Data Fetched", HttpStatus.OK, this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)));
-                }
-                else
-                {
+                } else {
                     logger.info("Category id is deleted");
                     return new BaseResponse("Category of given id is Deleted", HttpStatus.BAD_REQUEST);
                 }
-                } else {
+            } else {
                 logger.info("Fetched All Category");
                 return new BaseResponse("All data Fetched Successfully", HttpStatus.OK, this.categorySeviceInter.getCategory());
             }
@@ -113,4 +117,5 @@ public class MyCategoryController {
             return new BaseResponse("Id does not exist", HttpStatus.BAD_REQUEST);
         }
     }
+
 }
