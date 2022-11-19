@@ -1,14 +1,15 @@
 package com.curdexample.crudexample.Controller;
 
-import com.curdexample.crudexample.BaseResponse;
 import com.curdexample.crudexample.Services.CategorySeviceInter;
 import com.curdexample.crudexample.dto.Categorydto;
+import com.curdexample.crudexample.entities.Category;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -37,23 +39,25 @@ public class MyCategoryController {
      */
     @GetMapping
     @ApiOperation(value = "Search Category api")
-    public BaseResponse getCategory(@RequestParam(required = false) String categoryId) {
+    public ResponseEntity getCategory(@RequestParam(required = false) String categoryId) {
         try {
             if (categoryId != null) {
+                Category category=this.categorySeviceInter.getCategory(Integer.parseInt(categoryId));
                 if (categorySeviceInter.checkForDelete(categoryId) == false) {
                     logger.info("Fetched Category by Id");
-                    return new BaseResponse("Id Data Fetched", HttpStatus.OK, this.categorySeviceInter.getCategory(Integer.parseInt(categoryId)));
+                    return new ResponseEntity(category,HttpStatus.OK);
                 } else {
                     logger.info("Category id is deleted");
-                    return new BaseResponse("Category of given id is Deleted", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity("Category of given id is Deleted", HttpStatus.BAD_REQUEST);
                 }
             } else {
                 logger.info("Fetched All Category");
-                return new BaseResponse("All data Fetched Successfully", HttpStatus.OK, this.categorySeviceInter.getCategory());
+                List<Category> categories=this.categorySeviceInter.getCategory();
+                return new ResponseEntity(categories,HttpStatus.OK);
             }
         } catch (Exception e) {
             logger.error("id does not exist {}", e.getMessage());
-            return new BaseResponse("id does not exist", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("id does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -64,21 +68,22 @@ public class MyCategoryController {
      */
     @PostMapping
     @ApiOperation(value = "Store Category api")
-    public BaseResponse addCategory(@Valid @RequestBody Categorydto category) {
+    public ResponseEntity addCategory(@Valid @RequestBody Categorydto category) {
         try {
             logger.info("Category added");
             Categorydto c = this.categorySeviceInter.CheckNameCategory(category);
-            return new BaseResponse("Added successfully", HttpStatus.OK, this.categorySeviceInter.addCategory(category));
+            Category category1= this.categorySeviceInter.addCategory(category);
+            return new ResponseEntity(category1,HttpStatus.OK);
         } catch (IllegalArgumentException exc) {
             logger.error("Name is Null");
-            return new BaseResponse("Category Name is null", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Category Name is null", HttpStatus.BAD_REQUEST);
         } catch (RuntimeException ex) {
             logger.error("Unable to add as Name of product containing something other than letter");
-            return new BaseResponse("Unable to add as Name of product containing something other than letter", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Unable to add as Name of product containing something other than letter", HttpStatus.BAD_REQUEST);
 
         } catch (Exception e) {
             logger.error("Unable to add {}", e.getMessage());
-            return new BaseResponse("Not able to add", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Not able to add", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -89,14 +94,14 @@ public class MyCategoryController {
      */
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete Product api")
-    public BaseResponse deleteCategory(@PathVariable(value = "id") int categoryId) {
+    public ResponseEntity deleteCategory(@PathVariable(value = "id") int categoryId) {
         try {
             logger.info("deleted product");
             String s = this.categorySeviceInter.deleteCategory(categoryId);
-            return new BaseResponse("Deleted Successfully", HttpStatus.OK, s);
+            return new ResponseEntity(s,HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Unable to delete {}", e.getMessage());
-            return new BaseResponse("Id does not exist", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Id does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -108,13 +113,14 @@ public class MyCategoryController {
      */
     @PutMapping("/{id}")
     @ApiOperation(value = "Update Category api")
-    public BaseResponse updateCategory(@RequestBody Categorydto category, @PathVariable(value = "id") int categoryId) {
+    public ResponseEntity updateCategory(@RequestBody Categorydto category, @PathVariable(value = "id") int categoryId) {
         try {
             logger.info("Update category");
-            return new BaseResponse("Update Successfully", HttpStatus.OK, this.categorySeviceInter.updateCategory(category, categoryId));
+            Category category1=this.categorySeviceInter.updateCategory(category, categoryId);
+            return new ResponseEntity(category1, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Unable to update");
-            return new BaseResponse("Id does not exist", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Id does not exist", HttpStatus.BAD_REQUEST);
         }
     }
 
