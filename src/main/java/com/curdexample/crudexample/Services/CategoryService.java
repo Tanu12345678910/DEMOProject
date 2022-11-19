@@ -5,7 +5,6 @@ import com.curdexample.crudexample.ExternalMethod.ConvertEntityAndDto;
 import com.curdexample.crudexample.dao.CategoryDao;
 import com.curdexample.crudexample.dto.Categorydto;
 import com.curdexample.crudexample.entities.Category;
-import com.curdexample.crudexample.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
